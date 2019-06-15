@@ -1,6 +1,6 @@
 from flask import current_app
 
-from mhttp import HTTP
+from mapp.libs.mhttp import HTTP
 
 
 class YuShuBook:

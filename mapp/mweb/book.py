@@ -1,9 +1,9 @@
 from flask import jsonify, request
 from flask import Blueprint
 
+from mapp.libs.mhelper import is_isbn_or_key
 from mapp.mforms.book import SearchForm
-from mhelper import is_isbn_or_key
-from yushu_book import YuShuBook
+from mapp.spider.yushu_book import YuShuBook
 from . import web
 
 
