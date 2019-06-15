@@ -4,3 +4,6 @@
 2. url->endpoint(未指定的情况下为视图函数名称) ->viewfunc
 3. 视图文件book分离后出现404错误 （python中模块只能导入一次）
 4. 引入蓝图解决404问题
+5. app关键字段 url_map,view_functions
+6. request代理模式 request.args
+7. wtforms 插件 验证层 errors 属性

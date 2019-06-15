@@ -1,22 +1,27 @@
-from flask import jsonify
+from flask import jsonify, request
 from flask import Blueprint
 
+from mapp.mforms.book import SearchForm
 from mhelper import is_isbn_or_key
 from yushu_book import YuShuBook
+from . import web
 
-web = Blueprint('web', __name__)
 
-
-@web.route('/book/search/<q>/<page>')
-def search(q: 'str', page):
+@web.route('/book/search')
+def search():
     """
     q: 普通关键字
     page:
     """
-    isbn_or_key = is_isbn_or_key(q)
-    if 'isbn' == isbn_or_key:
-        result = YuShuBook.search_by_isbn(q)
+    form = SearchForm(request.args)
+    if form.validate():
+        q = form.q.data.strip()
+        page = form.page.data
+        isbn_or_key = is_isbn_or_key(q)
+        if 'isbn' == isbn_or_key:
+            result = YuShuBook.search_by_isbn(q)
+        else:
+            result = YuShuBook.search_by_keyword(q, page)
+        return jsonify(result)
     else:
-        result = YuShuBook.search_by_keyword(q)
-
-    return jsonify(result)
+        return jsonify(form.errors)

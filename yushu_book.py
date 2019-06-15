@@ -1,3 +1,5 @@
+from flask import current_app
+
 from mhttp import HTTP
 
 
@@ -12,7 +14,12 @@ class YuShuBook:
         return result
 
     @classmethod
-    def search_by_keyword(cls, keyword, count=15, start=0):
-        url = cls.keyword_url.format(keyword, count, start)
+    def search_by_keyword(cls, keyword, page=1):
+        url = cls.keyword_url.format(keyword, current_app.config['PER_PAGE'],
+                                     cls.calculate_page(page))
         result = HTTP.get(url)
         return result
+
+    @staticmethod
+    def calculate_page(page):
+        return (page-1) * current_app.config['PER_PAGE']
