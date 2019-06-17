@@ -5,4 +5,4 @@ app = create_app()
 
 if __name__ == '__main__':
     # nginx + uwsgi
-    app.run(host='0.0.0.0', debug=False, threaded=True)
+    app.run(host='0.0.0.0', debug=app.config['DEBUG'], threaded=True)

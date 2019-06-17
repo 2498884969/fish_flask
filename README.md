@@ -7,3 +7,5 @@
 5. app关键字段 url_map,view_functions
 6. request代理模式 request.args
 7. wtforms 插件 验证层 errors 属性
+8. json.dumps(yushu_book, default=lambda o: o.__dict__)
+9. local localstack app_ctx request_ctx local_proxy
