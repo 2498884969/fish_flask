@@ -4,7 +4,7 @@ class BookModelView:
         self.title = book['title']
         self.author = '、'.join(book['author'])
         self.publisher = book['publisher']
-        self.image = book['images']
+        self.image = book['images']['large']
         self.price = book['price']
         self.summary = book['summary']
         self.pages = book['pages']
