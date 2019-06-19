@@ -9,3 +9,10 @@
 7. wtforms 插件 验证层 errors 属性
 8. json.dumps(yushu_book, default=lambda o: o.__dict__)
 9. local localstack app_ctx request_ctx local_proxy
+10. app = Flask(__name__, static_folder='statics')
+11. render_template Flask(template_folder)
+12. super() 调用父类模板内容
+13. {{x.school | default(x.school) | default('为空')}}
+14. url_for endpoint {{url_for('static', filename='test.css')}}
+15. SECRET_KEY get_flashed_messages with set jinja2 文档
+

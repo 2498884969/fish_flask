@@ -1,3 +1,4 @@
 DEBUG = True
 
 PER_PAGE = 15
+SECRET_KEY = '123456789abcd'

@@ -1,6 +1,6 @@
 import json
 
-from flask import jsonify, request
+from flask import jsonify, request, render_template, flash
 
 from mapp.libs.mhelper import is_isbn_or_key
 from mapp.mforms.book import SearchForm
@@ -34,3 +34,11 @@ def search():
         # return jsonify(books)
     else:
         return jsonify(form.errors)
+
+
+@web.route('/test')
+def test():
+    data = dict(name='强旭辉', age=19)
+    flash('hehe')
+    flash('haha')
+    return render_template('test.html', data=data)
