@@ -7,7 +7,7 @@ import json
 from mapp.libs.mhelper import is_isbn_or_key
 from mapp.mforms.book import SearchForm
 from mapp.spider.yushu_book import YuShuBook
-from mapp.view_models.book import BookCollection
+from mapp.view_models.book import BookCollection, BookModelView
 from . import web
 
 __author__ = '七月'
@@ -44,34 +44,9 @@ def search():
 
 @web.route('/book/<isbn>/detail')
 def book_detail(isbn):
-    pass
+    yushu_book = YuShuBook()
+    yushu_book.search_by_isbn(isbn)
+    book = BookModelView(book=yushu_book.first)
+    return render_template('book_detail.html', book=book, wishes=[], gifts=[])
 
 
-@web.route('/test')
-def test():
-    r = {
-        'name': None,
-        'age': 18
-    }
-    # data['age']
-    r1 = {
-
-    }
-    flash('hello,qiyue', category='error')
-    flash('hello, jiuyue', category='warning')
-    # 模板 html
-    return render_template('test.html', data=r, data1=r1)
-
-
-# @web.route('/test1')
-# def test1():
-#     print(id(current_app))
-#     from flask import request
-#     from app.libs.none_local import n
-#     print(n.v)
-#     n.v = 2
-#     print('-----------------')
-#     print(getattr(request, 'v', None))
-#     setattr(request, 'v', 2)
-#     print('-----------------')
-#     return ''

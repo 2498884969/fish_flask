@@ -32,3 +32,7 @@ class YuShuBook:
     def __fill_collection(self, data):
         self.total = data['total']
         self.books = data['books']
+
+    @property
+    def first(self):
+        return self.books[0] if len(self.books) >= 1 else None
