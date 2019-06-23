@@ -15,4 +15,12 @@
 13. {{x.school | default(x.school) | default('为空')}}
 14. url_for endpoint {{url_for('static', filename='test.css')}}
 15. SECRET_KEY get_flashed_messages with set jinja2 文档
-
+16. sqlalchemy: base未指定主键 __abstract__=True
+17. methods=['GET', 'POST']
+18. model.Base:set_attrs(self, attrs_dict)
+20. db.session.add(user) db.session.commit
+21. 安装flask-login 注册login_manager user继承login_user
+22. 适当重复，孰能生效，温故知新
+23. http://127.0.0.1:5000/login?next=%2Fmy%2Fgifts http://127.0.0.1:5000/login?next=http://www.qq.com
+24. @login_required:指明访问控制的接口
+25. @login_manager.user_loader：根据session信息（通常为use_id）返回用户信息

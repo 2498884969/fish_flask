@@ -1,16 +1,41 @@
+from flask import render_template, request, redirect, url_for, flash
+from flask_login import login_user, login_required
+
+from mapp.mforms.auth import RegisterForm, LoginForm
+from mapp.models.base import db
+from mapp.models.user import User
 from . import web
+
 
 __author__ = '七月'
 
 
 @web.route('/register', methods=['GET', 'POST'])
 def register():
-    pass
+    form = RegisterForm(request.form)
+    if request.method == 'POST' and form.validate():
+        user = User()
+        user.set_attrs(form.data)
+        db.session.add(user)
+        db.session.commit()
+        return redirect(url_for('web.login'))
+    return render_template('auth/register.html', form=form)
 
 
 @web.route('/login', methods=['GET', 'POST'])
 def login():
-    pass
+    form = LoginForm(request.form)
+    if request.method == 'POST' and form.validate():
+        user = User.query.filter_by(email=form.email.data).first()
+        if user and user.check_password(form.password.data):
+            login_user(user, remember=True)
+            next_ = request.args.get('next')
+            if next_ is None or not next_.startswith('/'):
+                next_ = url_for('web.index')
+            return redirect(next_)
+        else:
+            flash('账号或密码不存在')
+    return render_template('auth/login.html', form=form)
 
 
 @web.route('/reset/password', methods=['GET', 'POST'])
