@@ -1,8 +1,7 @@
 """
  Created by 七月 on 2018-2-1.
 """
-from flask import jsonify, request, current_app, url_for, render_template, flash
-import json
+from flask import request, render_template, flash
 
 from mapp.libs.mhelper import is_isbn_or_key
 from mapp.mforms.book import SearchForm
@@ -38,7 +37,6 @@ def search():
         books.fill(yushu_book, q)
     else:
         flash('搜索的关键字不符合要求，请重新输入关键字')
-        # return jsonify(form.errors)
     return render_template('search_result.html', books=books)
 
 
