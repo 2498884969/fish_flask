@@ -1,6 +1,6 @@
 
 from flask_login import login_required, current_user
-from flask import current_app, flash
+from flask import current_app, flash, redirect, url_for
 
 from mapp.models.base import db
 from . import web
@@ -27,7 +27,7 @@ def save_to_gifts(isbn):
             db.session.add(gift)
     else:
         flash('这本书已经加入你的心愿清单或者已经存在于你的赠送清单')
-    return 'success'
+    return redirect(url_for('web.book_detail', isbn=isbn))
 
 
 @web.route('/gifts/<gid>/redraw')

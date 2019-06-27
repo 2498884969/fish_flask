@@ -4,6 +4,7 @@ from flask_login import UserMixin
 
 from mapp.libs.mhelper import is_isbn_or_key
 from mapp.models.gift import Gift
+from mapp.models.wish import Wish
 from mapp.spider.yushu_book import YuShuBook
 from .base import Base
 from mapp import login_manager
@@ -44,7 +45,7 @@ class User(UserMixin, Base):
         # 不允许一本书存在于心愿清单的同时存在于赠送清单
         gifting = Gift.query.filter_by(uid=self.id, isbn=isbn,
                                        launched=False).first()
-        wishing = Gift.query.filter_by(uid=self.id, isbn=isbn,
+        wishing = Wish.query.filter_by(uid=self.id, isbn=isbn,
                                        launched=False).first()
         if not gifting and not wishing:
             return True

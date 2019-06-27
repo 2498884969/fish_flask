@@ -24,3 +24,8 @@
 23. http://127.0.0.1:5000/login?next=%2Fmy%2Fgifts http://127.0.0.1:5000/login?next=http://www.qq.com
 24. @login_required:指明访问控制的接口
 25. @login_manager.user_loader：根据session信息（通常为use_id）返回用户信息
+26. flask-alchemy:重写filter_by
+
+- `127.0.0.1:5000/book/search`
+- `127.0.0.1:5000/register`
+- `127.0.0.1:5000/register`

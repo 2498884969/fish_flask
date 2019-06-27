@@ -5,9 +5,13 @@ from flask import request, render_template, flash
 
 from mapp.libs.mhelper import is_isbn_or_key
 from mapp.mforms.book import SearchForm
+from mapp.models.gift import Gift
+from mapp.models.wish import Wish
 from mapp.spider.yushu_book import YuShuBook
 from mapp.view_models.book import BookCollection, BookModelView
+from mapp.view_models.trade import TradeInfo
 from . import web
+from flask_login import current_user
 
 __author__ = '七月'
 
@@ -42,9 +46,30 @@ def search():
 
 @web.route('/book/<isbn>/detail')
 def book_detail(isbn):
+    has_in_gifts = False
+    has_in_wishes = False
+
+    # 获取书籍详情页的数据
     yushu_book = YuShuBook()
     yushu_book.search_by_isbn(isbn)
     book = BookModelView(book=yushu_book.first)
-    return render_template('book_detail.html', book=book, wishes=[], gifts=[])
+
+    if current_user.is_authenticated:
+        if Gift.query.filter_by(user_id=current_user, isbn=isbn,
+                                launched=False).first():
+            has_in_gifts = True
+        if Wish.query.filter_by(user_id=current_user, isbn=isbn,
+                                launched=False).first():
+            has_in_wishes = True
+
+    trade_gifts = Gift.query.filter_by(isbn=isbn, launched=False).all()
+    trade_wishes = Wish.query.filter_by(isbn=isbn, launched=False).all()
+
+    trade_gifts_model = TradeInfo(trade_gifts)
+    trade_wishes_model = TradeInfo(trade_wishes)
+
+    return render_template('book_detail.html', book=book,
+                           wishes=trade_wishes_model, gifts=trade_gifts_model,
+                           has_in_gifts=has_in_gifts, has_in_wishes=has_in_wishes)
 
 

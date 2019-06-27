@@ -16,12 +16,17 @@ def create_app():
     login_manager.login_message = '请先注册或者登陆'
 
     register_blueprint(app)
-
-    db.init_app(app=app)
-    db.create_all(app=app)
+    register_database(app)
     return app
 
 
 def register_blueprint(app: 'Flask'):
     from mapp.mweb.book import web
     app.register_blueprint(web)
+
+
+def register_database(app):
+    from mapp.models import book, gift, wish, user
+
+    db.init_app(app=app)
+    db.create_all(app=app)
