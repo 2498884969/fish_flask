@@ -1,8 +1,10 @@
-from flask import current_app, flash, redirect, url_for
+from flask import current_app, flash, redirect, url_for, render_template
 from flask_login import login_required, current_user
 
 from mapp.models.base import db
+from mapp.models.gift import Gift
 from mapp.models.wish import Wish
+from mapp.view_models.gift import MyGifts
 from . import web
 
 __author__ = '七月'
@@ -10,7 +12,15 @@ __author__ = '七月'
 
 @web.route('/my/wish')
 def my_wish():
-    pass
+
+    uid = current_user.id
+    wishes_of_mine = Wish.get_user_wishes(uid)
+
+    isbn_list = [wish.isbn for wish in wishes_of_mine]
+    gift_count_list = Wish.get_gift_counts(isbn_list)
+    view_model = MyGifts(wishes_of_mine, gift_count_list)
+
+    return render_template('my_wish.html', wishes=view_model.gifts)
 
 
 @web.route('/wish/book/<isbn>')

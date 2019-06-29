@@ -55,10 +55,10 @@ def book_detail(isbn):
     book = BookModelView(book=yushu_book.first)
 
     if current_user.is_authenticated:
-        if Gift.query.filter_by(user_id=current_user, isbn=isbn,
+        if Gift.query.filter_by(uid=current_user.id, isbn=isbn,
                                 launched=False).first():
             has_in_gifts = True
-        if Wish.query.filter_by(user_id=current_user, isbn=isbn,
+        if Wish.query.filter_by(uid=current_user.id, isbn=isbn,
                                 launched=False).first():
             has_in_wishes = True
 
