@@ -1,1 +1,9 @@
 SQLALCHEMY_DATABASE_URI = 'mysql+cymysql://root:123456@127.0.0.1:3306/fisher'
+
+# Email 配置
+MAIL_SERVER = 'smtp.163.com'
+MAIL_PORT = 465
+MAIL_USE_SSL = True
+MAIL_USE_TSL = False
+MAIL_USERNAME = '13814032052@163.com'
+MAIL_PASSWORD = ''

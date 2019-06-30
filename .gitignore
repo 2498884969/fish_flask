@@ -1,3 +1,4 @@
 __pycache__
 .idea
 migrations/
+mapp/secure.py

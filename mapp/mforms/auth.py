@@ -21,3 +21,8 @@ class RegisterForm(Form):
 class LoginForm(Form):
     email = StringField('电子邮件', validators=[DataRequired(), Length(1, 64), Email(message='电子邮箱不符合规范')])
     password = PasswordField('密码', validators=[DataRequired(), Length(6, 20)])
+
+
+class EmailForm(Form):
+    email = StringField('电子邮件', validators=[DataRequired(), Length(1, 64), Email(message='电子邮箱不符合规范')])
+
