@@ -1,7 +1,7 @@
 from flask import render_template, request, redirect, url_for, flash
 from flask_login import login_user, login_required, logout_user
 
-from mapp.mforms.auth import RegisterForm, LoginForm, EmailForm
+from mapp.mforms.auth import RegisterForm, LoginForm, EmailForm, ResetPasswordForm
 from mapp.models.base import db
 from mapp.models.user import User
 from . import web
@@ -46,14 +46,24 @@ def forget_password_request():
             account_email = form.email.data
             user = User.query.filter_by(email=account_email).first_or_404()
             from mapp.libs.email import send_mail
-            send_mail()
+            send_mail(form.email.data,
+                      '重置你的密码', 'email/reset_password.html',
+                      user=user, token=user.generate_token())
 
     return render_template('auth/forget_password_request.html', form=form)
 
 
 @web.route('/reset/password/<token>', methods=['GET', 'POST'])
 def forget_password(token):
-    pass
+    form = ResetPasswordForm(request.form)
+    if request.method == 'POST' and form.validate():
+        succ = User.reset_password(token, new_password=form.password1.data)
+        if succ:
+            flash('密码重置成功')
+            return redirect(url_for('web.login'))
+        else:
+            flash('密码重置失败')
+    return render_template('auth/forget_password.html', form=form)
 
 
 @web.route('/change/password', methods=['GET', 'POST'])

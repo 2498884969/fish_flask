@@ -1,8 +1,11 @@
 from mapp import mail
 from flask_mail import Message
+from flask import current_app, render_template
 
 
-def send_mail():
-    msg = Message('邮件测试', sender='13814032052@163.com', body='test',
-                  recipients=['13814032052@163.com'])
+def send_mail(to, subject, template, **kwargs):
+    msg = Message('[鱼书]' + ' ' + subject,
+                  sender=current_app.config['MAIL_USERNAME'],
+                  recipients=[to])
+    msg.html = render_template(template, **kwargs)
     mail.send(msg)

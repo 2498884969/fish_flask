@@ -1,12 +1,14 @@
 from sqlalchemy import Column, Integer, String, Boolean, Float
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
+from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
+from flask import current_app
 
 from mapp.libs.mhelper import is_isbn_or_key
 from mapp.models.gift import Gift
 from mapp.models.wish import Wish
 from mapp.spider.yushu_book import YuShuBook
-from .base import Base
+from .base import Base, db
 from mapp import login_manager
 
 
@@ -22,6 +24,25 @@ class User(UserMixin, Base):
     send_counter = Column(Integer, default=0)
     receive_counter = Column(Integer, default=0)
     _password = Column('password', String(100))
+
+    def generate_token(self, expiration=600):
+        s = Serializer(current_app.config['SECRET_KEY'], expiration)
+        return s.dumps(dict(id=self.id)).decode('utf-8')
+
+    @staticmethod
+    def reset_password(token, new_password):
+
+        s = Serializer(current_app.config['SECRET_KEY'])
+        try:
+            data = s.loads(token.encode('utf-8'))
+        except Exception:
+            return False
+
+        uid = data['id']
+        with db.auto_commit():
+            user = User.query.get(uid)
+            user.password = new_password
+        return True
 
     @property
     def password(self):
