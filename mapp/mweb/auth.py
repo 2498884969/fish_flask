@@ -5,6 +5,7 @@ from mapp.mforms.auth import RegisterForm, LoginForm, EmailForm, ResetPasswordFo
 from mapp.models.base import db
 from mapp.models.user import User
 from . import web
+from mapp.libs.email import send_mail
 
 
 __author__ = '七月'
@@ -45,10 +46,11 @@ def forget_password_request():
         if form.validate():
             account_email = form.email.data
             user = User.query.filter_by(email=account_email).first_or_404()
-            from mapp.libs.email import send_mail
+
             send_mail(form.email.data,
                       '重置你的密码', 'email/reset_password.html',
                       user=user, token=user.generate_token())
+            flash(f'邮件发送成功请到{account_email}进行查收')
 
     return render_template('auth/forget_password_request.html', form=form)
 

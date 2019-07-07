@@ -4,7 +4,9 @@ from flask_login import UserMixin
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from flask import current_app
 
+from mapp.libs.enums import PendingStatus
 from mapp.libs.mhelper import is_isbn_or_key
+from mapp.models.drift import Drift
 from mapp.models.gift import Gift
 from mapp.models.wish import Wish
 from mapp.spider.yushu_book import YuShuBook
@@ -24,6 +26,30 @@ class User(UserMixin, Base):
     send_counter = Column(Integer, default=0)
     receive_counter = Column(Integer, default=0)
     _password = Column('password', String(100))
+
+    @property
+    def summary(self):
+        return dict(
+            nickname=self.nickname,
+            beans=self.beans,
+            email=self.email,
+            send_receive=str(self.send_counter) + '/' + str(self.receive_counter)
+        )
+
+    def can_send_drift(self):
+        if self.beans < 1:
+            return False
+
+        success_gifts_count = Gift.query.filter_by(
+            uid=self.id, launched=True).count()
+        success_receive_count = Drift.query.filter_by(
+            requester_id=self.id, pending=PendingStatus.Success).count()
+
+        # if success_receive_count/success_gifts_count > 2:
+        #     return False
+        # else:
+        #     return True
+        return True
 
     def generate_token(self, expiration=600):
         s = Serializer(current_app.config['SECRET_KEY'], expiration)
