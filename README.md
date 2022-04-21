@@ -25,8 +25,6 @@
 24. @login_required:指明访问控制的接口
 25. @login_manager.user_loader：根据session信息（通常为use_id）返回用户信息
 26. flask-alchemy:重写filter_by
-27. 九层之塔起于垒土，千里之行始于足下
-28. `from itsdangerous import TimedJSONWebSignatureSerializer as Serializer` 加密
 
 - `127.0.0.1:5000/book/search`
 - `127.0.0.1:5000/register`
